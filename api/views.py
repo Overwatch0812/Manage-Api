@@ -43,3 +43,15 @@ class UpdateApiView(APIView):
         if serializer.is_valid():
             serializer.save()
             return HttpResponse("Default Response")
+
+class UserWithProject(APIView):
+    def get(self, request, id, format=None):
+        try:
+            project_instance = project.objects.filter(email=id)
+            serializer = ProjectSerializer(project_instance,many=True)
+            return HttpResponse(serializer.data)
+        except project.DoesNotExist:
+            return HttpResponse({"error": "Project not found"}, status=status.HTTP_404_NOT_FOUND)
+    
+
+    
