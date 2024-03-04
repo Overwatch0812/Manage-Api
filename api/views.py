@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from django.http import HttpResponse
 from .models import project
 from .serializers import ProjectSerializer
+import json
 
 from rest_framework.permissions import AllowAny
 # Create your views here.
@@ -49,7 +50,8 @@ class UserWithProject(APIView):
         try:
             project_instance = project.objects.filter(email=id)
             serializer = ProjectSerializer(project_instance,many=True)
-            return HttpResponse(serializer.data)
+            jason=json.dumps(serializer.data)
+            return HttpResponse(jason)
         except project.DoesNotExist:
             return HttpResponse({"error": "Project not found"}, status=status.HTTP_404_NOT_FOUND)
     
